@@ -1,0 +1,13 @@
+best <- function(state, outcome) {
+        a<-read.csv("outcome-of-care-measures.csv")
+        
+        b<-a[,7]
+        c<-b[b=state]
+        e=unique(a[,7])
+        
+        if(sum(state==e)==1){
+            1    
+        }else{
+                return(paste("Error in",best(state, outcome),": invalid state"))
+        }
+}
