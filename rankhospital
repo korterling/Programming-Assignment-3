@@ -1,0 +1,51 @@
+rankhospital <- function(state, outcome, num = "best") {
+        
+        a<-read.csv("outcome-of-care-measures.csv")
+        
+        
+        e<-unique(a[,7])
+        f<-c("heart attack","heart failure","pneumonia")
+        if(sum(state==e)==0){
+                stop("invalid state",call. = TRUE)  
+                #print(paste("Error in best(",state,',',outcome,') : invalid state',sep=""))
+        }else if(sum(outcome==f)==0){
+                stop("invalid outcome",call. = TRUE)  
+                #print(paste("Error in best(",state,',',outcome,') : invalid outcome',sep=""))
+        }else{
+                if(outcome==f[1]){
+                        data<-a[,c(2,7,11)]
+                }else if(outcome==f[2]){
+                        data<-a[,c(2,7,17)]
+                }else
+                {data<-a[,c(2,7,23)]}
+                data1<-data[data$State==state,]
+                
+                #data2<-cbind(data1[,1],data1[,2],data1[,3][!(is.na(as.numeric(as.character(data1[,3]))))])
+                data3<-as.numeric(as.character(data1[,3]))
+                data4<-data3[!is.na(data3)]
+                data5<-cbind.data.frame(data1[,1],data1[,2],data3)
+                data6<-data5[!is.na(data5$data3),]
+                data7<-data6[order(data6[,3],data6[,1]),]
+              if(num=="best"){
+                      oo<-as.character(data7[1,1])
+                      return(oo)
+              }else if(num=="worst"){
+                      oo<-as.character(data7[length(data7[,1]),1])
+                      return(oo)
+              }else if(num>length(data7[,1])){
+                     #message("NA",appendLF = TRUE)
+                     return("NA")
+              }
+                #print(data6)
+                
+                #print(data2)
+                #print(data1[,3])
+                #data3<-as.data.frame(data1[,1])
+                #print(data3)
+        }
+        
+        ## Read outcome data
+        ## Check that state and outcome are valid
+        ## Return hospital name in that state with the given rank
+        ## 30-day death rate
+}
