@@ -1,0 +1,51 @@
+rankall <- function(outcome, num = "best"){
+        a<-read.csv("outcome-of-care-measures.csv") 
+        e<-factor(unique(a[,7]))
+        f<-c("heart attack","heart failure","pneumonia")                 
+        if(sum(outcome==f)==0){
+                stop("invalid outcome",call. = TRUE)                 
+        }else{
+                if(outcome==f[1]){
+                        data<-a[,c(2,7,11)]
+                }else if(outcome==f[2]){
+                        data<-a[,c(2,7,17)]
+                }else{
+                        data<-a[,c(2,7,23)]}   
+                              
+                #data3<-as.numeric(as.character(data[,3]))
+                #data4<-data[!is.na(data3),]
+                #data5<-cbind.data.frame(data1[,1],data1[,2],data4)
+                data1<-data[!is.na(as.numeric(as.character(data[,3]))),]
+                data2<-cbind.data.frame(data1[,1],data1[,2],as.numeric(as.character(data1[,3])))
+                #data7<-data6[order(data6[,3],data6[,1]),]
+                data8<-split(data2,data2[,2])  
+                d <- data.frame("hospital","state",stringsAsFactors=FALSE)
+                
+                        
+                        if(num=="best"){
+                                for(i in 1:length(e)){
+                                data9<-data8[i]
+                                data10<-data9[order(data9[,3],data9[,1]),]
+                                d[,1][i]<-as.character(data10[1,1])
+                                d[,2][i]<-as.character(e[i])}
+                                
+                                
+                        }else if(num=="worst"){
+                                for(i in 1:length(e)){
+                                        data9<-data8[i]
+                                        data10<-data9[order(data9[,3],data9[,1]),]
+                                        d[,1][i]<-as.character(data10[length(data10[,1]),1])
+                                        d[,2][i]<-as.character(e[i])}
+                        }else if(num>length(data7[,1])){
+                                #message("NA",appendLF = TRUE)
+                                return("NA")
+                        }else{
+                                for(i in 1:length(e)){
+                                        data9<-data8[i]
+                                        data10<-data9[order(data9[,3],data9[,1]),]
+                                        d[,1][i]<-as.character(data10[1,1])
+                                        d[,2][i]<-as.character(e[i])}
+                        }
+                }
+                
+        }
